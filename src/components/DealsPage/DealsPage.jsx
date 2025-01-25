@@ -41,6 +41,7 @@ const DealsPage = () => {
     <div className="deals-page">
       <div className="deals-hero">
         <div className="hero-content">
+          <div className="picknow-text">PICKNOW</div>
           <h1>Exclusive Deals</h1>
           <p className="hero-subtitle">Discover amazing offers and save big!</p>
           <div className="hero-stats">

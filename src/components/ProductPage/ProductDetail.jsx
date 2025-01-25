@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Minus, Plus } from 'lucide-react';
 import { FaStar } from 'react-icons/fa';
 import './ProductDetail.css';
@@ -7,9 +8,10 @@ import Nuts from '../../assets/Nuts.jpg'
 import honey from '../../assets/honey.jpg'
 
 
-const ProductDetail = ({ product, onBack, onAddToCart }) => {
+const ProductDetail = ({ product, onBack }) => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const navigate = useNavigate();
 
   // Sample product images array with actual imported images
   const images = [
@@ -40,47 +42,31 @@ const ProductDetail = ({ product, onBack, onAddToCart }) => {
   };
 
   const handleAddToCart = () => {
-    // Get existing cart from localStorage
     const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
-    
-    // Check if product already exists in cart
     const existingItemIndex = existingCart.findIndex(item => item.id === product.id);
     
+    let updatedCart;
     if (existingItemIndex !== -1) {
-      // Update quantity if product exists
-      existingCart[existingItemIndex].quantity += quantity;
+      updatedCart = existingCart.map(item =>
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
+      );
     } else {
-      // Add new product to cart
-      existingCart.push({
-        ...product,
-        quantity: quantity
-      });
+      updatedCart = [...existingCart, { ...product, quantity }];
     }
     
-    // Save updated cart to localStorage
-    localStorage.setItem('cart', JSON.stringify(existingCart));
-    
-    // Update cart count in localStorage
-    const totalItems = existingCart.reduce((sum, item) => sum + item.quantity, 0);
-    localStorage.setItem('cartCount', totalItems);
-
-    // Dispatch custom event to notify navbar
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    const totalItems = updatedCart.reduce((sum, item) => sum + item.quantity, 0);
+    localStorage.setItem('cartCount', totalItems.toString());
     window.dispatchEvent(new CustomEvent('cartUpdated', { 
       detail: { count: totalItems }
     }));
-    
-    // Call the parent component's onAddToCart if provided
-    if (onAddToCart) {
-      onAddToCart(product, quantity);
-    }
   };
 
   const handleBuyNow = () => {
-    // Add to cart first
     handleAddToCart();
-    
-    // Navigate to cart page
-    window.location.href = '/cart'; // Update this with your actual cart route
+    navigate('/cart');
   };
 
   return (

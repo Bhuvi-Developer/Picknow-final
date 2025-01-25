@@ -5,22 +5,80 @@
 }
 
 .deals-hero {
-    background: linear-gradient(135deg, #ff8c42 0%, #ff5722 100%);
-  padding: 4rem 2rem;
+  background: linear-gradient(-45deg, #427eff, #e55fe1, #ff8c42, #50ff9f);
+  background-size: 400% 400%;
+  padding: 6rem 2rem 4rem;
   color: white;
   text-align: center;
+  animation: gradientBG 15s ease infinite;
+  position: relative;
+  overflow: visible;
 }
 
 .hero-content {
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
 }
 
-.hero-content h1 {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  color:white;
+.hero-content::before {
+  content: 'PICKNOW';
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8rem;
+  font-weight: 800;
+  opacity: 0.2;
+  letter-spacing: 12px;
+  white-space: nowrap;
+  color: white;
+  z-index: 1;
+  animation: floatText 3s ease-in-out infinite,
+             glowText 2s ease-in-out infinite alternate,
+             colorShift 8s linear infinite;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes floatText {
+  0% {
+    transform: translate(-50%, 0) rotate(-2deg) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -15px) rotate(2deg) scale(1.05);
+  }
+  100% {
+    transform: translate(-50%, 0) rotate(-2deg) scale(1);
+  }
+}
+
+@keyframes glowText {
+  0% {
+    opacity: 0.15;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    opacity: 0.25;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+  }
+}
+
+@keyframes colorShift {
+  0% {
+    color: rgba(255, 255, 255, 0.8);
+  }
+  25% {
+    color: rgba(255, 140, 66, 0.8);
+  }
+  50% {
+    color: rgba(255, 87, 34, 0.8);
+  }
+  75% {
+    color: rgba(255, 127, 80, 0.8);
+  }
+  100% {
+    color: rgba(255, 255, 255, 0.8);
+  }
 }
 
 .hero-subtitle {
@@ -355,4 +413,4 @@
   .deal-image {
     height: 140px;
   }
-} 
+}

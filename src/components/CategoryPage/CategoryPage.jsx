@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaLeaf, FaCoffee, FaWineBottle, FaCandyCane, FaCarrot, FaIceCream } from 'react-icons/fa';
+import Vegetables from '../../assets/Vegetables.jpg';
+import Beverages from '../../assets/Beverages.jpg';
 import './CategoryPage.css';
 
 const CategoryPage = () => {
@@ -36,7 +38,7 @@ const CategoryPage = () => {
         <h2>Featured Categories</h2>
         <div className="featured-banners">
           <div className="featured-banner">
-            <img src="/images/fresh-vegetables.jpg" alt="Fresh Vegetables" />
+            <img src = {Vegetables} alt="Vegetables" />
             <div className="banner-content">
               <h3>Fresh Vegetables</h3>
               <p>Up to 30% off</p>
@@ -44,7 +46,7 @@ const CategoryPage = () => {
             </div>
           </div>
           <div className="featured-banner">
-            <img src="/images/beverages.jpg" alt="Beverages" />
+            <img src={Beverages} alt="Beverages" />
             <div className="banner-content">
               <h3>Beverages</h3>
               <p>Buy 2 Get 1 Free</p>

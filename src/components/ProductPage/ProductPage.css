@@ -1,3 +1,7 @@
+.main-content {
+    margin-top: 4rem;
+}
+
 /* Product Page Layout */
 .best-selling {
   MARGIN-TOP: 39px;
@@ -33,9 +37,6 @@
   height: fit-content;
   flex-shrink: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 2rem;
-  transition: all 0.3s ease;
 }
 
 .filter-section {
@@ -382,17 +383,32 @@
     padding: 1.5rem;
   }
 
+  .product-layout {
+    flex-direction: column;
+  }
+
+  .products-header {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
   .filter-sidebar {
     position: fixed;
     top: 0;
     left: -100%;
     height: 100vh;
-    width: 280px;
+    width: 85%;
+    max-width: 350px;
     z-index: 1000;
     background: white;
-    transition: left 0.3s ease;
+    transition: all 0.3s ease;
     overflow-y: auto;
-    padding-top: 60px;
+    padding: 20px;
+    box-shadow: none;
   }
 
   .filter-sidebar.active {
@@ -400,19 +416,62 @@
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   }
 
-  .products-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.875rem;
+  .filter-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
   }
 
-  .product-card {
-    max-width: 200px;
+  .filter-overlay.active {
+    display: block;
+  }
+
+  .close-filter {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0.5rem;
+    line-height: 1;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+
+  .close-filter:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
   }
 }
 
 @media (max-width: 768px) {
   .best-selling {
     padding: 1rem;
+  }
+
+  .mobile-toggle {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .mobile-toggle .filter-icon {
+    font-size: 1.1rem;
+  }
+
+  .filter-sidebar {
+    width: 100%;
+    max-width: 300px;
   }
 
   .product-layout {
@@ -460,6 +519,19 @@
 @media (max-width: 576px) {
   .best-selling {
     padding: 0.75rem;
+  }
+
+  .mobile-toggle {
+    padding: 0.5rem 0.7rem;
+  }
+
+  .mobile-toggle .filter-icon {
+    font-size: 1rem;
+  }
+
+  .filter-sidebar {
+    width: 100%;
+    max-width: 280px;
   }
 
   .products-grid {
@@ -602,4 +674,117 @@
   outline: none;
   border-color: #ff8c42;
   box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.1);
+}
+
+/* Rating Styles */
+.rating {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.3rem;
+  --stroke: #666;
+  --fill: #ffc73a;
+}
+
+.rating input {
+  appearance: unset;
+}
+
+.rating label {
+  cursor: pointer;
+}
+
+.rating svg {
+  width: 2rem;
+  height: 2rem;
+  overflow: visible;
+  fill: transparent;
+  stroke: var(--stroke);
+  stroke-linejoin: bevel;
+  stroke-dasharray: 12;
+  animation: idle 4s linear infinite;
+  transition: stroke 0.2s, fill 0.5s;
+}
+
+@keyframes idle {
+  from {
+    stroke-dashoffset: 24;
+  }
+}
+
+.rating label:hover svg {
+  stroke: var(--fill);
+}
+
+.rating input:checked ~ label svg {
+  transition: 0s;
+  animation: idle 4s linear infinite, yippee 0.75s backwards;
+  fill: var(--fill);
+  stroke: var(--fill);
+  stroke-opacity: 0;
+  stroke-dasharray: 0;
+  stroke-linejoin: miter;
+  stroke-width: 8px;
+}
+
+@keyframes yippee {
+  0% {
+    transform: scale(1);
+    fill: var(--fill);
+    fill-opacity: 0;
+    stroke-opacity: 1;
+    stroke: var(--stroke);
+    stroke-dasharray: 10;
+    stroke-width: 1px;
+    stroke-linejoin: bevel;
+  }
+
+  30% {
+    transform: scale(0);
+    fill: var(--fill);
+    fill-opacity: 0;
+    stroke-opacity: 1;
+    stroke: var(--stroke);
+    stroke-dasharray: 10;
+    stroke-width: 1px;
+    stroke-linejoin: bevel;
+  }
+
+  30.1% {
+    stroke: var(--fill);
+    stroke-dasharray: 0;
+    stroke-linejoin: miter;
+    stroke-width: 8px;
+  }
+
+  60% {
+    transform: scale(1.2);
+    fill: var(--fill);
+  }
+}
+
+.mobile-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #ff8c42;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.mobile-toggle .filter-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.mobile-toggle:hover {
+  background: #ff7f50;
+}
+
+.filter-overlay {
+  display: none;
 }

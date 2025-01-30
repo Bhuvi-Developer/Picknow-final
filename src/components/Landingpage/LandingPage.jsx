@@ -2,9 +2,9 @@ import React from 'react';
 import Carousel from './Carousel';
 import ShinyText from './ShinyText';
 import './LandingPage.css';
-import dryFruit1 from '../../assets/dry-fruits.jpg';
-import honey from '../../assets/honey.jpg'
-import Nuts from '../../assets/Nuts.jpg'
+import dryFruit1 from '../../assets/dryfruits.jpg';
+import honey from '../../assets/honey.jpg';
+import Nuts from '../../assets/Nuts.jpg';
 import { FaShoppingCart, FaHeart, FaLink, FaStar } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';

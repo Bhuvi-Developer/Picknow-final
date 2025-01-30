@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './Carousel.css';
-import dryFruit1 from '../../assets/dry-fruits.jpg'
-import Nuts from '../../assets/Nuts.jpg'
-import honey from '../../assets/honey.jpg'
+import dryfruits from '../../assets/dryfruits.jpg';
+import Nuts from '../../assets/Nuts.jpg';
+import honey from '../../assets/honey.jpg';
 
 const carouselData = [
   {
     id: 1,
     image: {
-      src: dryFruit1,
+      src:dryfruits,
       alt: "Organic Products Showcase",
       aspectRatio: "1.7777777777777777"
     },

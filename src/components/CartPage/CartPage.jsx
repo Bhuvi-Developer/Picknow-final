@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import './CartPage.css';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('cart');
     return savedCart ? JSON.parse(savedCart) : [];
@@ -45,6 +46,16 @@ const CartPage = () => {
 
   const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
+  const handleCheckout = () => {
+    navigate('/payment', {
+      state: {
+        cart: cart,
+        totalAmount: total,
+        isFromCart: true
+      }
+    });
+  };
+
   if (cart.length === 0) {
     return (
       <div className="empty-cart">
@@ -81,9 +92,9 @@ const CartPage = () => {
                 <span>{item.quantity}</span>
                 <button onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}>+</button>
               </div>
-              <button onClick={() => handleRemoveFromCart(item.id)} className="remove-button">
+              {/* <button onClick={() => handleRemoveFromCart(item.id)} className="remove-button">
                 <Trash2 className="icon" />
-              </button>
+              </button> */}
             </div>
           </div>
         ))}
@@ -93,7 +104,9 @@ const CartPage = () => {
           <span>Total:</span>
           <span>₹{total}</span>
         </div>
-        <button className="checkout-button">Proceed to Checkout</button>
+        <button className="checkout-button" onClick={handleCheckout}>
+          Proceed to Checkout
+        </button>
       </div>
     </div>
   );

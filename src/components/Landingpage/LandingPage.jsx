@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 
 import { Link } from 'react-router-dom';
 import Footer from '../Footer/Footer';
+import CategoryNav from '../Navbar/CategoryNav';
 
 const BestSellingProduct = ({ image, category, name, weight, rating, originalPrice, discountedPrice }) => {
   return (
@@ -164,6 +165,9 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      <div className='categoryNav'>
+      <CategoryNav />
+      </div>
       <section className="hero-section">
         <Carousel />
       </section>

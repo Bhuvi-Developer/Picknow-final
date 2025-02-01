@@ -30,18 +30,17 @@ const Footer = () => {
             <h3>About</h3>
             <ul className="footer-links">
               <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/find-store">Find store</Link></li>
               <li><Link to="/categories">Categories</Link></li>
               <li><Link to="/deals">Deals</Link></li>
             </ul>
           </div>
 
           <div className="footer-column">
-            <h3>Information</h3>
+            <h3>Useful Links</h3>
             <ul className="footer-links">
-              <li><Link to="/help">Help Center</Link></li>
-              <li><Link to="/shipping">Shipping</Link></li>
-              <li><Link to="/contact">Contact us</Link></li>
+              <li><Link to="/Terms & Conditions">Terms & Conditions</Link></li>
+              <li><Link to="/Privacy Policy">Privacy Policy</Link></li>
+              <li><Link to="/Refund">Refund</Link></li>
             </ul>
           </div>
 
@@ -49,7 +48,7 @@ const Footer = () => {
             <h3>For users</h3>
             <ul className="footer-links">
               <li><Link to="/Login">Login</Link></li>
-              <li><Link to="/register">Register</Link></li>
+              <li><Link to="/Login">Register</Link></li>
               <li><Link to="/settings">Settings</Link></li>
               <li><Link to="/orders">My Orders</Link></li>
             </ul>

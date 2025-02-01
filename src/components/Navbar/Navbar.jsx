@@ -98,7 +98,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                 <span className="welcome-text">Welcome, {username}!</span>
                 <CartIcon />
                 <Link 
-                  to="/UserProfile" 
+                  to="/Profile" 
                   className="nav-icon-link"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

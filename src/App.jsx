@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
+import CategoryNav from './components/Navbar/CategoryNav';
 import LandingPage from './components/Landingpage/LandingPage';
 import Login from './components/Login/Login';
 import ProductPage from './components/ProductPage/ProductPage';
@@ -11,7 +12,9 @@ import CategoryPage from './components/CategoryPage/CategoryPage';
 import DealsPage from './components/DealsPage/DealsPage';
 import PaymentPage from './components/PaymentPage/PaymentPage';
 import CategoryProducts from './components/CategoryPage/CategoryProducts';
-// import Refund from './components/Footer/Refund';
+import TermsAndConditions from './components/Footer/TermsAndConditions/TermsAndConditions';
+import PrivacyPolicy from './components/Footer/PrivacyPolicy/PrivacyPolicy';
+import Refund from './components/Footer/refund';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,7 +50,9 @@ const App = () => {
           <Route path="/category/:id" element={<CategoryProducts />} />
           <Route path="/deals" element={<DealsPage />} />
           <Route path="/payment" element={<PaymentPage />} />
-          {/* <Route path='/' */}
+          <Route path="/Refund" element={<Refund />} />
+          <Route path="/Terms & Conditions" element={<TermsAndConditions />} />
+          <Route path="/Privacy Policy" element={<PrivacyPolicy />} />
         </Routes>
       </div>
     </div>

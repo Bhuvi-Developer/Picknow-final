@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaTag, FaClock, FaPercent, FaArrowRight } from 'react-icons/fa';
+import { FaTag, FaClock, FaPercent, FaArrowRight, FaGift } from 'react-icons/fa';
 import bundleDeals from '../../assets/bundleDeals.jpg';
 import ClearanceSale from '../../assets/ClearanceSale.jpg';
 import flashSale from '../../assets/flashSale.jpg';
 import './DealsPage.css';
 
 const DealsPage = () => {
+  const [copiedCode, setCopiedCode] = useState('');
+
+  const handleCopyCode = (code) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(''), 2000);
+  };
+
   const deals = [
     {
       id: 1,
@@ -91,37 +99,48 @@ const DealsPage = () => {
           ))}
         </div>
 
-        <div className="coupon-section">
+        <div className="discount-section">
           <div className="section-header">
-            <h2>Special Coupons</h2>
-            <p>Use these coupons to get additional discounts</p>
+            <h2>Special Discounts</h2>
+            <p>Exclusive discount codes for extra savings</p>
           </div>
-          <div className="coupons-grid">
-            <div className="coupon-card">
-              <div className="coupon-content">
-                <div className="coupon-icon">
-                  <FaPercent />
+          <div className="discount-grid">
+            <div className="discount-card">
+              <div className="discount-content">
+                <div className="discount-icon">
+                  <FaTag />
                 </div>
-                <div className="coupon-details">
-                  <h3>SAVE20</h3>
-                  <p>20% off on your first order</p>
-                  <span className="coupon-validity">Valid until Dec 31, 2024</span>
+                <div className="discount-details">
+                  <h3>20% OFF</h3>
+                  <p>Save 20% on your first order</p>
+                  <span className="discount-validity">Valid until December 31, 2024</span>
                 </div>
               </div>
-              <button className="copy-coupon-btn">Copy Code</button>
+              <button 
+                className="copy-discount-btn"
+                onClick={() => handleCopyCode('SAVE20')}
+              >
+                {copiedCode === 'SAVE20' ? 'Copied!' : 'SAVE20'}
+              </button>
             </div>
-            <div className="coupon-card">
-              <div className="coupon-content">
-                <div className="coupon-icon">
-                  <FaPercent />
+
+            <div className="discount-card">
+              <div className="discount-content">
+                <div className="discount-icon">
+                  <FaGift />
                 </div>
-                <div className="coupon-details">
-                  <h3>BUNDLE30</h3>
-                  <p>30% off on bundle purchases</p>
-                  <span className="coupon-validity">Valid until Dec 31, 2024</span>
+                <div className="discount-details">
+                  <h3>30% OFF</h3>
+                  <p>Bundle purchases discount</p>
+                  <span className="discount-validity">Valid until December 31, 2024</span>
                 </div>
               </div>
-              <button className="copy-coupon-btn">Copy Code</button>
+              <button 
+                className="copy-discount-btn"
+                onClick={() => handleCopyCode('BUNDLE30')}
+              >
+                {copiedCode === 'BUNDLE30' ? 'Copied!' : 'BUNDLE30'}
+              </button>
             </div>
           </div>
         </div>

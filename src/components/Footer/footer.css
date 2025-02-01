@@ -1,6 +1,8 @@
 .footer {
-  background-color: #f8f9fa;
-  padding: 40px 0;
+  background-color: #f6f6f6;
+  color: #fff;
+  padding: 40px 0 20px;
+  position: relative;
   font-family: 'Lato', sans-serif;
   margin-top: 40px;
 }

@@ -2,9 +2,9 @@ import React from 'react';
 import Carousel from './Carousel';
 import ShinyText from './ShinyText';
 import './LandingPage.css';
-import dryFruit1 from '../../assets/dry-fruits.jpg';
-import honey from '../../assets/honey.jpg'
-import Nuts from '../../assets/Nuts.jpg'
+import dryFruit1 from '../../assets/dryfruits.jpg';
+import honey from '../../assets/honey.jpg';
+import Nuts from '../../assets/Nuts.jpg';
 import { FaShoppingCart, FaHeart, FaLink, FaStar } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 
 import { Link } from 'react-router-dom';
 import Footer from '../Footer/Footer';
+import CategoryNav from '../Navbar/CategoryNav';
 
 const BestSellingProduct = ({ image, category, name, weight, rating, originalPrice, discountedPrice }) => {
   return (
@@ -164,6 +165,9 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      <div className='categoryNav'>
+      <CategoryNav />
+      </div>
       <section className="hero-section">
         <Carousel />
       </section>

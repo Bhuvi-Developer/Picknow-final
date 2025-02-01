@@ -1,39 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import CartPage from '../CartPage/CartPage';
 import ProductDetail from './ProductDetail';
 import './ProductPage.css';
 import Nuts from '../../assets/Nuts.jpg';
 import honey from '../../assets/honey.jpg';
-import { FaHeart, FaShoppingCart, FaStar, FaFilter } from 'react-icons/fa';
+import { FaHeart, FaShoppingCart, FaStar, FaFilter, FaTimes } from 'react-icons/fa';
+
+// Add Rating component
+const Rating = ({ selectedRating, handleRatingSelect }) => {
+  return (
+    <div className="rating">
+      {[5, 4, 3, 2, 1].map((rating) => (
+        <React.Fragment key={rating}>
+          <input
+            type="radio"
+            id={`star-${rating}`}
+            name="star-radio"
+            value={`star-${rating}`}
+            checked={selectedRating === rating}
+            onChange={() => handleRatingSelect(rating)}
+          />
+          <label htmlFor={`star-${rating}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" />
+            </svg>
+          </label>
+        </React.Fragment>
+      ))}
+    </div>
+  );
+};
 
 const ProductPage = () => {
-  const navigate = useNavigate();
-  const [cart, setCart] = useState([]);
+  const [currentPage, setCurrentPage] = useState('listing');
+  const [selectedProductId, setSelectedProductId] = useState(null);
   const [addedProducts, setAddedProducts] = useState({});
   const [priceRange, setPriceRange] = useState([49, 1000]);
   const [selectedSizes, setSelectedSizes] = useState(['100g']);
   const [selectedRating, setSelectedRating] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-  // Initialize filteredProducts with all products
-  useEffect(() => {
-    setFilteredProducts(products);
-  }, []);
-
-  // Load cart from local storage
-  useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-  }, []);
-
-  // Update local storage when cart changes
+  // Update local storage and cart count whenever cart changes
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    localStorage.setItem('cartCount', totalItems.toString());
+    window.dispatchEvent(new CustomEvent('cartUpdated', { 
+      detail: { count: totalItems }
+    }));
   }, [cart]);
 
   const products = [
@@ -51,7 +71,7 @@ const ProductPage = () => {
     {
       id: 2,
       name: 'Black Raisin/பாதாம்',
-      weight: '100g',
+      weight: '200g',
       price: 50,
       originalPrice: 90,
       image: Nuts,
@@ -73,7 +93,7 @@ const ProductPage = () => {
     {
       id: 4,
       name: 'Dry dates/பாதாம்',
-      weight: '100g',
+      weight: '500g',
       price: 150,
       originalPrice: 200,
       image: Nuts,
@@ -88,22 +108,50 @@ const ProductPage = () => {
       price: 199,
       originalPrice: 350,
       image: Nuts,
-      rating: 4.5,
+      rating: 5,
       category: 'Dry fruits',
       description: 'Premium quality dry figs.',
     },
     {
       id: 6,
       name: 'Honey/பாதாம்',
+      weight: '200g',
+      price: 99,
+      originalPrice: 400,
+      image: honey,
+      rating: 1,
+      category: 'Dry fruits',
+      description: 'Premium quality dry amla.',
+    },
+
+    {
+      id: 7,
+      name: 'Honey/பாதாம்',
       weight: '100g',
       price: 99,
       originalPrice: 400,
       image: honey,
-      rating: 4.5,
+      rating: 2,
+      category: 'Dry fruits',
+      description: 'Premium quality dry amla.',
+    },
+    {
+      id: 8,
+      name: 'Honey/பாதாம்',
+      weight: '100g',
+      price: 99,
+      originalPrice: 400,
+      image: honey,
+      rating: 3,
       category: 'Dry fruits',
       description: 'Premium quality dry amla.',
     },
   ];
+
+  // Initialize filteredProducts with all products
+  useEffect(() => {
+    setFilteredProducts(products);
+  }, []);
 
   // Filter products based on selected criteria
   useEffect(() => {
@@ -139,37 +187,51 @@ const ProductPage = () => {
     setSelectedRating(rating === selectedRating ? null : rating);
   };
 
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = (e, product, quantity = 1) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     setCart(prevCart => {
-      const updatedCart = prevCart.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + quantity }
-          : item
-      );
-
-      if (!prevCart.find(item => item.id === product.id)) {
-        updatedCart.push({ ...product, quantity });
+      const existingItem = prevCart.find(item => item.id === product.id);
+      if (existingItem) {
+        return prevCart.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        );
       }
-
-      // Save to localStorage
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-      // Update cart count
-      const totalItems = updatedCart.reduce((sum, item) => sum + item.quantity, 0);
-      localStorage.setItem('cartCount', totalItems);
-
-      // Dispatch custom event to notify navbar
-      window.dispatchEvent(new CustomEvent('cartUpdated', { 
-        detail: { count: totalItems }
-      }));
-
-      return updatedCart;
+      return [...prevCart, { ...product, quantity }];
     });
+
     setAddedProducts(prev => ({ ...prev, [product.id]: true }));
   };
 
+  const updateQuantity = (productId, newQuantity) => {
+    if (newQuantity < 1) return;
+    
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
+  const removeFromCart = (productId) => {
+    setCart(prevCart => prevCart.filter(item => item.id !== productId));
+  };
+
+  const navigateBack = () => {
+    setCurrentPage('listing');
+  };
+
   const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`);
+    setSelectedProductId(productId);
+    setCurrentPage('detail');
+  };
+
+  const handleBackToListing = () => {
+    setCurrentPage('listing');
+    setSelectedProductId(null);
   };
 
   const toggleFilter = () => {
@@ -181,6 +243,30 @@ const ProductPage = () => {
     setSelectedSizes(['100g']);
     setSelectedRating(null);
   };
+
+  if (currentPage === 'cart') {
+    return (
+      <CartPage
+        cart={cart}
+        updateQuantity={updateQuantity}
+        removeFromCart={removeFromCart}
+        navigateBack={navigateBack}
+      />
+    );
+  }
+
+  if (currentPage === 'detail') {
+    const selectedProduct = products.find(p => p.id === selectedProductId);
+    return (
+      <ProductDetail
+        product={selectedProduct}
+        onBack={handleBackToListing}
+        onAddToCart={addToCart}
+        cart={cart}
+        updateQuantity={updateQuantity}
+      />
+    );
+  }
 
   return (
     <div className="best-selling">
@@ -195,13 +281,26 @@ const ProductPage = () => {
       </div>
 
       <div className="product-layout">
-        {/* Mobile Filter Toggle */}
-        <button className="filter-toggle" onClick={toggleFilter}>
-          <FaFilter /> Filters
-        </button>
+        {/* Filter Overlay */}
+        <div 
+          className={`filter-overlay ${isFilterOpen ? 'active' : ''}`}
+          onClick={() => {
+            setIsFilterOpen(false);
+            document.body.style.overflow = 'auto';
+          }}
+        />
 
         {/* Filter Sidebar */}
         <div className={`filter-sidebar ${isFilterOpen ? 'active' : ''}`}>
+          <button 
+            className="close-filter"
+            onClick={() => {
+              setIsFilterOpen(false);
+              document.body.style.overflow = 'auto';
+            }}
+          >
+            <FaTimes />
+          </button>
           <div className="filter-section">
             <h3>
               Filter By Price
@@ -259,20 +358,7 @@ const ProductPage = () => {
           <div className="filter-section">
             <h3>Product Rating</h3>
             <div className="rating-options">
-              {[5, 4, 3, 2, 1].map(rating => (
-                <label key={rating} className="rating-option">
-                  <input
-                    type="checkbox"
-                    checked={selectedRating === rating}
-                    onChange={() => handleRatingSelect(rating)}
-                  />
-                  <div className="stars">
-                    {[...Array(rating)].map((_, i) => (
-                      <FaStar key={i} className="star-icon" />
-                    ))}
-                  </div>
-                </label>
-              ))}
+              <Rating selectedRating={selectedRating} handleRatingSelect={handleRatingSelect} />
             </div>
           </div>
         </div>
@@ -280,13 +366,26 @@ const ProductPage = () => {
         {/* Products Container */}
         <div className="products-container">
           <div className="products-header">
-            <span>We found {filteredProducts.length} items for you!</span>
+            <button className="mobile-toggle" onClick={toggleFilter}>
+              {isFilterOpen ? (
+                <>
+                  <FaTimes className="filter-icon" />
+                  <span>Close</span>
+                </>
+              ) : (
+                <>
+                  <FaFilter className="filter-icon" />
+                  <span>Filter</span>
+                </>
+              )}
+            </button>
             <select className="sort-select">
               <option value="featured">Featured</option>
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>
               <option value="rating">Rating</option>
             </select>
+          <span className="products-count">We found {filteredProducts.length} items for you!</span>
           </div>
 
           <div className="products-grid">
@@ -311,7 +410,7 @@ const ProductPage = () => {
                     className="cart-button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      addToCart(product);
+                      addToCart(e, product);
                     }}
                   >
                     <FaShoppingCart />
@@ -333,8 +432,7 @@ const ProductPage = () => {
                     className="buy-button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      addToCart(product);
-                      navigate('/cart');
+                      handleProductClick(product.id);
                     }}
                   >
                     Buy Now

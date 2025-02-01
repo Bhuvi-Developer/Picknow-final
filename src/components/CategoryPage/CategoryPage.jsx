@@ -1,16 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaLeaf, FaCoffee, FaWineBottle, FaCandyCane, FaCarrot, FaIceCream } from 'react-icons/fa';
+import { FaLeaf, FaCoffee, FaWineBottle, FaCandyCane, FaCarrot, FaIceCream, FaCocktail } from 'react-icons/fa';
+import Vegetables from '../../assets/Vegetables.jpg';
+import Beverages from '../../assets/Beverages.jpg';
 import './CategoryPage.css';
+import { FaCookie } from 'react-icons/fa6';
+import { GiFastNoodles } from 'react-icons/gi';
 
 const CategoryPage = () => {
   const categories = [
-    { id: 1, name: 'Vegetables & Fruits', icon: <FaLeaf />, color: '#4CAF50' },
-    { id: 2, name: 'Beverages', icon: <FaCoffee />, color: '#795548' },
-    { id: 3, name: 'Wine & Alcohol', icon: <FaWineBottle />, color: '#9C27B0' },
-    { id: 4, name: 'Snacks', icon: <FaCandyCane />, color: '#FF5722' },
-    { id: 5, name: 'Fresh Food', icon: <FaCarrot />, color: '#FF9800' },
-    { id: 6, name: 'Frozen Food', icon: <FaIceCream />, color: '#2196F3' }
+    { id: 1, name: 'Herbals', icon: <FaLeaf />, color: '#4CAF50' },
+    { id: 2, name: 'Millet Cookies', icon: <FaCookie />, color: '#795548' },
+    { id: 3, name: 'Millet Noodles', icon: <GiFastNoodles />, color: '#9C27B0' },
+    { id: 4, name: 'Honey', icon: <FaCandyCane />, color: '#FF5722' },
+    { id: 5, name: 'Dry Fruties', icon: <FaCarrot />, color: '#FF9800' },
+    { id: 6, name: 'Traditional Rise', icon: <FaIceCream />, color: '#2196F3' }
   ];
 
   return (
@@ -36,7 +40,7 @@ const CategoryPage = () => {
         <h2>Featured Categories</h2>
         <div className="featured-banners">
           <div className="featured-banner">
-            <img src="/images/fresh-vegetables.jpg" alt="Fresh Vegetables" />
+            <img src = {Vegetables} alt="Vegetables" />
             <div className="banner-content">
               <h3>Fresh Vegetables</h3>
               <p>Up to 30% off</p>
@@ -44,7 +48,7 @@ const CategoryPage = () => {
             </div>
           </div>
           <div className="featured-banner">
-            <img src="/images/beverages.jpg" alt="Beverages" />
+            <img src={Beverages} alt="Beverages" />
             <div className="banner-content">
               <h3>Beverages</h3>
               <p>Buy 2 Get 1 Free</p>

@@ -1,12 +1,12 @@
 import React from 'react';
 import './ShinyText.css';
 
-const ShinyText = ({ text, disabled = false, speed = 5, className = '' }) => {
+const GlowingText = ({ text, inactive = false, speed = 5, className = '' }) => {
   const animationDuration = `${speed}s`;
 
   return (
     <div
-      className={`shiny-text ${disabled ? 'disabled' : ''} ${className}`}
+      className={`glowing-text ${inactive ? 'inactive' : ''} ${className}`}
       style={{ animationDuration }}
     >
       {text}
@@ -14,4 +14,4 @@ const ShinyText = ({ text, disabled = false, speed = 5, className = '' }) => {
   );
 };
 
-export default ShinyText;
+export default GlowingText;

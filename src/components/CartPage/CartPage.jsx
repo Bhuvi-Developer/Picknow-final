@@ -1,31 +1,60 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Trash2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import './CartPage.css';
 
 const CartPage = () => {
-  const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  const updateCartCount = (updatedCart) => {
+    const totalItems = updatedCart.reduce((sum, item) => sum + item.quantity, 0);
+    localStorage.setItem('cartCount', totalItems.toString());
+    window.dispatchEvent(new CustomEvent('cartUpdated', { 
+      detail: { count: totalItems }
+    }));
+  };
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setCart(storedCart);
-  }, []);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount(cart);
+  }, [cart]);
 
-  const handleUpdateQuantity = (id, quantity) => {
-    const updatedCart = cart.map((item) =>
-      item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
-    );
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+  const handleUpdateQuantity = (productId, newQuantity) => {
+    if (newQuantity < 1) {
+      handleRemoveFromCart(productId);
+      return;
+    }
+
+    setCart(prevCart => {
+      const updatedCart = prevCart.map(item =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      );
+      return updatedCart;
+    });
   };
 
-  const handleRemoveFromCart = (id) => {
-    const updatedCart = cart.filter((item) => item.id !== id);
-    setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
+  const handleRemoveFromCart = (productId) => {
+    setCart(prevCart => {
+      const updatedCart = prevCart.filter(item => item.id !== productId);
+      return updatedCart;
+    });
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const handleCheckout = () => {
+    navigate('/payment', {
+      state: {
+        cart: cart,
+        totalAmount: total,
+        isFromCart: true
+      }
+    });
+  };
 
   if (cart.length === 0) {
     return (
@@ -63,9 +92,9 @@ const CartPage = () => {
                 <span>{item.quantity}</span>
                 <button onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}>+</button>
               </div>
-              <button onClick={() => handleRemoveFromCart(item.id)} className="remove-button">
+              {/* <button onClick={() => handleRemoveFromCart(item.id)} className="remove-button">
                 <Trash2 className="icon" />
-              </button>
+              </button> */}
             </div>
           </div>
         ))}
@@ -75,7 +104,9 @@ const CartPage = () => {
           <span>Total:</span>
           <span>₹{total}</span>
         </div>
-        <button className="checkout-button">Proceed to Checkout</button>
+        <button className="checkout-button" onClick={handleCheckout}>
+          Proceed to Checkout
+        </button>
       </div>
     </div>
   );
